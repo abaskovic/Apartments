@@ -18,19 +18,18 @@ namespace Apartments
         public Apartment()
         {
             this.UploadedFiles = new HashSet<UploadedFile>();
-            this.Cities = new HashSet<City>();
-            this.Users = new HashSet<User>();
         }
     
         public int IDApartment { get; set; }
         public string Address { get; set; }
-        public string City { get; set; }
+        public int CityIDCity { get; set; }
+        public int UserIDUser { get; set; }
+        public int CityIDCity1 { get; set; }
+        public int UserIDUser1 { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UploadedFile> UploadedFiles { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<City> Cities { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<User> Users { get; set; }
+        public virtual City City1 { get; set; }
+        public virtual User User { get; set; }
     }
 }

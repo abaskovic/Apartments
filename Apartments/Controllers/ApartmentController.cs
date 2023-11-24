@@ -59,7 +59,7 @@ namespace Apartments.Controllers
 
 
         [HttpPost]
-        public ActionResult Create(Apartment apartment, IEnumerable<HttpPostedFileBase> files)
+        public ActionResult Create(Apartment apartment)
         {
             if (ModelState.IsValid)
             {
@@ -85,8 +85,6 @@ namespace Apartments.Controllers
             if (TryUpdateModel(apartment,"",new string[]
             {
                 nameof(Apartment.Address),
-                nameof(Apartment.City),
-                nameof(Apartment.Contact)
             }))
             {
                 db.Entry(apartment).State = EntityState.Modified;

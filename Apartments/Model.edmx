@@ -8,9 +8,24 @@
   <EntityContainer Name="ModelStoreContainer">
     <EntitySet Name="Apartments" EntityType="Model.Store.Apartments" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="UploadedFiles" EntityType="Model.Store.UploadedFiles" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Users" EntityType="Model.Store.Users" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Cities" EntityType="Model.Store.Cities" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Countries" EntityType="Model.Store.Countries" store:Type="Tables" Schema="dbo" />
     <AssociationSet Name="ApartmentUploadedFile" Association="Model.Store.ApartmentUploadedFile">
       <End Role="Apartment" EntitySet="Apartments" />
       <End Role="UploadedFile" EntitySet="UploadedFiles" />
+    </AssociationSet>
+    <AssociationSet Name="CountryCity" Association="Model.Store.CountryCity">
+      <End Role="Country" EntitySet="Countries" />
+      <End Role="City" EntitySet="Cities" />
+    </AssociationSet>
+    <AssociationSet Name="CityApartment" Association="Model.Store.CityApartment">
+      <End Role="City" EntitySet="Cities" />
+      <End Role="Apartment" EntitySet="Apartments" />
+    </AssociationSet>
+    <AssociationSet Name="UserApartment" Association="Model.Store.UserApartment">
+      <End Role="User" EntitySet="Users" />
+      <End Role="Apartment" EntitySet="Apartments" />
     </AssociationSet>
   </EntityContainer>
   <EntityType Name="Apartments">
@@ -19,8 +34,10 @@
     </Key>
     <Property Name="IDApartment" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Address" Type="nvarchar" Nullable="false" MaxLength="50" />
-    <Property Name="City" Type="nvarchar" Nullable="false" MaxLength="20" />
-    <Property Name="Contact" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="CityIDCity" Type="int" Nullable="false" />
+    <Property Name="UserIDUser" Type="int" Nullable="false" />
+    <Property Name="CityIDCity1" Type="int" Nullable="false" />
+    <Property Name="UserIDUser1" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="UploadedFiles">
     <Key>
@@ -32,6 +49,33 @@
     <Property Name="Content" Type="varbinary(max)" Nullable="false" />
     <Property Name="ApartmentIDApartment" Type="int" Nullable="false" />
   </EntityType>
+  <EntityType Name="Users">
+    <Key>
+      <PropertyRef Name="IDUser" />
+    </Key>
+    <Property Name="IDUser" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FirstName" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="LastName" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="Email" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="Phone" Type="nvarchar" Nullable="false" MaxLength="20" />
+  </EntityType>
+  <EntityType Name="Cities">
+    <Key>
+      <PropertyRef Name="IDCity" />
+    </Key>
+    <Property Name="IDCity" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="CountryIDCountry" Type="int" Nullable="false" />
+    <Property Name="CountryIDCountry1" Type="int" Nullable="false" />
+    <Property Name="CountryIDCountry2" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Countries">
+    <Key>
+      <PropertyRef Name="IDCountry" />
+    </Key>
+    <Property Name="IDCountry" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="50" />
+  </EntityType>
   <Association Name="ApartmentUploadedFile">
     <End Role="Apartment" Type="Model.Store.Apartments" Multiplicity="1" />
     <End Role="UploadedFile" Type="Model.Store.UploadedFiles" Multiplicity="*" />
@@ -41,6 +85,42 @@
       </Principal>
       <Dependent Role="UploadedFile">
         <PropertyRef Name="ApartmentIDApartment" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="CountryCity">
+    <End Role="Country" Type="Model.Store.Countries" Multiplicity="1" />
+    <End Role="City" Type="Model.Store.Cities" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Country">
+        <PropertyRef Name="IDCountry" />
+      </Principal>
+      <Dependent Role="City">
+        <PropertyRef Name="CountryIDCountry2" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="CityApartment">
+    <End Role="City" Type="Model.Store.Cities" Multiplicity="1" />
+    <End Role="Apartment" Type="Model.Store.Apartments" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="City">
+        <PropertyRef Name="IDCity" />
+      </Principal>
+      <Dependent Role="Apartment">
+        <PropertyRef Name="CityIDCity1" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="UserApartment">
+    <End Role="User" Type="Model.Store.Users" Multiplicity="1" />
+    <End Role="Apartment" Type="Model.Store.Apartments" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="IDUser" />
+      </Principal>
+      <Dependent Role="Apartment">
+        <PropertyRef Name="UserIDUser1" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -58,17 +138,17 @@
           <EntitySet Name="Users" EntityType="Model.User" />
           <EntitySet Name="Cities" EntityType="Model.City" />
           <EntitySet Name="Countries" EntityType="Model.Country" />
-          <AssociationSet Name="CityCountry" Association="Model.CityCountry">
-            <End Role="City" EntitySet="Cities" />
+          <AssociationSet Name="CountryCity" Association="Model.CountryCity">
             <End Role="Country" EntitySet="Countries" />
-          </AssociationSet>
-          <AssociationSet Name="ApartmentCity" Association="Model.ApartmentCity">
-            <End Role="Apartment" EntitySet="Apartments" />
             <End Role="City" EntitySet="Cities" />
           </AssociationSet>
-          <AssociationSet Name="ApartmentUser" Association="Model.ApartmentUser">
+          <AssociationSet Name="CityApartment" Association="Model.CityApartment">
+            <End Role="City" EntitySet="Cities" />
             <End Role="Apartment" EntitySet="Apartments" />
+          </AssociationSet>
+          <AssociationSet Name="UserApartment" Association="Model.UserApartment">
             <End Role="User" EntitySet="Users" />
+            <End Role="Apartment" EntitySet="Apartments" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="Apartment">
@@ -77,10 +157,13 @@
           </Key>
           <Property Name="IDApartment" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Address" Type="String" Nullable="false" MaxLength="50" />
-          <Property Name="City" Type="String" Nullable="false" MaxLength="20" />
           <NavigationProperty Name="UploadedFiles" Relationship="Model.ApartmentUploadedFile" FromRole="Apartment" ToRole="UploadedFile" />
-          <NavigationProperty Name="Cities" Relationship="Model.ApartmentCity" FromRole="Apartment" ToRole="City" />
-          <NavigationProperty Name="Users" Relationship="Model.ApartmentUser" FromRole="Apartment" ToRole="User" />
+          <Property Name="CityIDCity" Type="Int32" Nullable="false" />
+          <Property Name="UserIDUser" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="City1" Relationship="Model.CityApartment" FromRole="Apartment" ToRole="City" />
+          <Property Name="CityIDCity1" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="User" Relationship="Model.UserApartment" FromRole="Apartment" ToRole="User" />
+          <Property Name="UserIDUser1" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="UploadedFile">
           <Key>
@@ -114,8 +197,7 @@
           <Property Name="LastName" Type="String" Nullable="false" MaxLength="50" />
           <Property Name="Email" Type="String" Nullable="false" MaxLength="50" />
           <Property Name="Phone" Type="String" Nullable="false" MaxLength="20" />
-          <NavigationProperty Name="Apartment" Relationship="Model.ApartmentUser" FromRole="User" ToRole="Apartment" />
-          <Property Name="ApartmentIDApartment" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Apartments" Relationship="Model.UserApartment" FromRole="User" ToRole="Apartment" />
         </EntityType>
         <EntityType Name="City">
           <Key>
@@ -123,10 +205,11 @@
           </Key>
           <Property Name="IDCity" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="50" />
-          <NavigationProperty Name="Country" Relationship="Model.CityCountry" FromRole="City" ToRole="Country" />
           <Property Name="CountryIDCountry" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Apartment" Relationship="Model.ApartmentCity" FromRole="City" ToRole="Apartment" />
-          <Property Name="ApartmentIDApartment" Type="Int32" Nullable="false" />
+          <Property Name="CountryIDCountry1" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Country" Relationship="Model.CountryCity" FromRole="City" ToRole="Country" />
+          <Property Name="CountryIDCountry2" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Apartments" Relationship="Model.CityApartment" FromRole="City" ToRole="Apartment" />
         </EntityType>
         <EntityType Name="Country">
           <Key>
@@ -134,41 +217,41 @@
           </Key>
           <Property Name="IDCountry" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="50" />
-          <NavigationProperty Name="Cities" Relationship="Model.CityCountry" FromRole="Country" ToRole="City" />
+          <NavigationProperty Name="Cities" Relationship="Model.CountryCity" FromRole="Country" ToRole="City" />
         </EntityType>
-        <Association Name="CityCountry">
-          <End Type="Model.City" Role="City" Multiplicity="*" />
+        <Association Name="CountryCity">
           <End Type="Model.Country" Role="Country" Multiplicity="1" />
+          <End Type="Model.City" Role="City" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Country">
               <PropertyRef Name="IDCountry" />
             </Principal>
             <Dependent Role="City">
-              <PropertyRef Name="CountryIDCountry" />
+              <PropertyRef Name="CountryIDCountry2" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="ApartmentCity">
-          <End Type="Model.Apartment" Role="Apartment" Multiplicity="1" />
-          <End Type="Model.City" Role="City" Multiplicity="*" />
+        <Association Name="CityApartment">
+          <End Type="Model.City" Role="City" Multiplicity="1" />
+          <End Type="Model.Apartment" Role="Apartment" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Apartment">
-              <PropertyRef Name="IDApartment" />
+            <Principal Role="City">
+              <PropertyRef Name="IDCity" />
             </Principal>
-            <Dependent Role="City">
-              <PropertyRef Name="ApartmentIDApartment" />
+            <Dependent Role="Apartment">
+              <PropertyRef Name="CityIDCity1" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="ApartmentUser">
-          <End Type="Model.Apartment" Role="Apartment" Multiplicity="1" />
-          <End Type="Model.User" Role="User" Multiplicity="*" />
+        <Association Name="UserApartment">
+          <End Type="Model.User" Role="User" Multiplicity="1" />
+          <End Type="Model.Apartment" Role="Apartment" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Apartment">
-              <PropertyRef Name="IDApartment" />
+            <Principal Role="User">
+              <PropertyRef Name="IDUser" />
             </Principal>
-            <Dependent Role="User">
-              <PropertyRef Name="ApartmentIDApartment" />
+            <Dependent Role="Apartment">
+              <PropertyRef Name="UserIDUser1" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -183,7 +266,10 @@
         <MappingFragment StoreEntitySet="Apartments">
           <ScalarProperty Name="IDApartment" ColumnName="IDApartment" />
           <ScalarProperty Name="Address" ColumnName="Address" />
-          <ScalarProperty Name="City" ColumnName="City" />
+          <ScalarProperty Name="CityIDCity" ColumnName="CityIDCity" />
+          <ScalarProperty Name="UserIDUser" ColumnName="UserIDUser" />
+          <ScalarProperty Name="CityIDCity1" ColumnName="CityIDCity1" />
+          <ScalarProperty Name="UserIDUser1" ColumnName="UserIDUser1" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -195,6 +281,36 @@
           <ScalarProperty Name="ContentType" ColumnName="ContentType" />
           <ScalarProperty Name="Content" ColumnName="Content" />
           <ScalarProperty Name="ApartmentIDApartment" ColumnName="ApartmentIDApartment" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Users">
+      <EntityTypeMapping TypeName="IsTypeOf(Model.User)">
+        <MappingFragment StoreEntitySet="Users">
+          <ScalarProperty Name="IDUser" ColumnName="IDUser" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Phone" ColumnName="Phone" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Cities">
+      <EntityTypeMapping TypeName="IsTypeOf(Model.City)">
+        <MappingFragment StoreEntitySet="Cities">
+          <ScalarProperty Name="IDCity" ColumnName="IDCity" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="CountryIDCountry" ColumnName="CountryIDCountry" />
+          <ScalarProperty Name="CountryIDCountry1" ColumnName="CountryIDCountry1" />
+          <ScalarProperty Name="CountryIDCountry2" ColumnName="CountryIDCountry2" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Countries">
+      <EntityTypeMapping TypeName="IsTypeOf(Model.Country)">
+        <MappingFragment StoreEntitySet="Countries">
+          <ScalarProperty Name="IDCountry" ColumnName="IDCountry" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

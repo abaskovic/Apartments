@@ -14,12 +14,20 @@ namespace Apartments
     
     public partial class City
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public City()
+        {
+            this.Apartments = new HashSet<Apartment>();
+        }
+    
         public int IDCity { get; set; }
         public string Name { get; set; }
         public int CountryIDCountry { get; set; }
-        public int ApartmentIDApartment { get; set; }
+        public int CountryIDCountry1 { get; set; }
+        public int CountryIDCountry2 { get; set; }
     
         public virtual Country Country { get; set; }
-        public virtual Apartment Apartment { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Apartment> Apartments { get; set; }
     }
 }
