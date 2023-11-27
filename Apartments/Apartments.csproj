@@ -135,6 +135,7 @@
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="Controllers\ApartmentController.cs" />
+    <Compile Include="Controllers\CityController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Country.cs">
       <DependentUpon>Model.tt</DependentUpon>
@@ -216,12 +217,17 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\User\Index.cshtml" />
+    <Content Include="Views\City\Index.cshtml" />
+    <Content Include="Views\City\Create.cshtml" />
     <Content Include="Views\Apartment\Index.cshtml" />
     <Content Include="Views\Apartment\Create.cshtml" />
-    <Content Include="Views\Apartment\Delete.cshtml" />
-    <Content Include="Views\Apartment\Edit.cshtml" />
-    <Content Include="Views\Apartment\Details.cshtml" />
-    <Content Include="Views\User\Index.cshtml" />
+    <Content Include="Views\City\Delete.cshtml" />
+    <Content Include="Views\City\Details.cshtml" />
+    <Content Include="Views\City\Edit.cshtml" />
+    <Content Include="Views\User\Delete.cshtml" />
+    <Content Include="Views\User\Edit.cshtml" />
+    <Content Include="Views\User\Details.cshtml" />
     <Content Include="Views\User\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>

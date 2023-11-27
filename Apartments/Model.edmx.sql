@@ -2,8 +2,8 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 11/24/2023 15:44:58
--- Generated from EDMX file: D:\Podaci\office10\Documents\Apartments\Apartments\Model.edmx
+-- Date Created: 11/27/2023 11:16:23
+-- Generated from EDMX file: C:\Users\office10\source\repos\abaskovic\Apartments\Apartments\Model.edmx
 -- --------------------------------------------------
 
 SET QUOTED_IDENTIFIER OFF;
@@ -20,14 +20,20 @@ GO
 IF OBJECT_ID(N'[dbo].[FK_ApartmentUploadedFile]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[UploadedFiles] DROP CONSTRAINT [FK_ApartmentUploadedFile];
 GO
-IF OBJECT_ID(N'[dbo].[FK_CountryCity]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[Cities] DROP CONSTRAINT [FK_CountryCity];
+IF OBJECT_ID(N'[dbo].[FK_CityCountry]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Cities] DROP CONSTRAINT [FK_CityCountry];
+GO
+IF OBJECT_ID(N'[dbo].[FK_ApartmentUser]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Apartments] DROP CONSTRAINT [FK_ApartmentUser];
+GO
+IF OBJECT_ID(N'[dbo].[FK_ApartmentCity]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Apartments] DROP CONSTRAINT [FK_ApartmentCity];
+GO
+IF OBJECT_ID(N'[dbo].[FK_ApartmentUser1]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Apartments] DROP CONSTRAINT [FK_ApartmentUser1];
 GO
 IF OBJECT_ID(N'[dbo].[FK_CityApartment]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[Apartments] DROP CONSTRAINT [FK_CityApartment];
-GO
-IF OBJECT_ID(N'[dbo].[FK_UserApartment]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[Apartments] DROP CONSTRAINT [FK_UserApartment];
 GO
 
 -- --------------------------------------------------
@@ -59,9 +65,7 @@ CREATE TABLE [dbo].[Apartments] (
     [IDApartment] int IDENTITY(1,1) NOT NULL,
     [Address] nvarchar(50)  NOT NULL,
     [CityIDCity] int  NOT NULL,
-    [UserIDUser] int  NOT NULL,
-    [CityIDCity1] int  NOT NULL,
-    [UserIDUser1] int  NOT NULL
+    [UserIDUser] int  NOT NULL
 );
 GO
 
@@ -89,9 +93,7 @@ GO
 CREATE TABLE [dbo].[Cities] (
     [IDCity] int IDENTITY(1,1) NOT NULL,
     [Name] nvarchar(50)  NOT NULL,
-    [CountryIDCountry] int  NOT NULL,
-    [CountryIDCountry1] int  NOT NULL,
-    [CountryIDCountry2] int  NOT NULL
+    [CountryIDCountry] int  NOT NULL
 );
 GO
 
@@ -155,49 +157,79 @@ ON [dbo].[UploadedFiles]
     ([ApartmentIDApartment]);
 GO
 
--- Creating foreign key on [CountryIDCountry2] in table 'Cities'
+-- Creating foreign key on [CountryIDCountry] in table 'Cities'
 ALTER TABLE [dbo].[Cities]
-ADD CONSTRAINT [FK_CountryCity]
-    FOREIGN KEY ([CountryIDCountry2])
+ADD CONSTRAINT [FK_CityCountry]
+    FOREIGN KEY ([CountryIDCountry])
     REFERENCES [dbo].[Countries]
         ([IDCountry])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
 GO
 
--- Creating non-clustered index for FOREIGN KEY 'FK_CountryCity'
-CREATE INDEX [IX_FK_CountryCity]
+-- Creating non-clustered index for FOREIGN KEY 'FK_CityCountry'
+CREATE INDEX [IX_FK_CityCountry]
 ON [dbo].[Cities]
-    ([CountryIDCountry2]);
+    ([CountryIDCountry]);
 GO
 
--- Creating foreign key on [CityIDCity1] in table 'Apartments'
+-- Creating foreign key on [UserIDUser] in table 'Apartments'
 ALTER TABLE [dbo].[Apartments]
-ADD CONSTRAINT [FK_CityApartment]
-    FOREIGN KEY ([CityIDCity1])
-    REFERENCES [dbo].[Cities]
-        ([IDCity])
-    ON DELETE NO ACTION ON UPDATE NO ACTION;
-GO
-
--- Creating non-clustered index for FOREIGN KEY 'FK_CityApartment'
-CREATE INDEX [IX_FK_CityApartment]
-ON [dbo].[Apartments]
-    ([CityIDCity1]);
-GO
-
--- Creating foreign key on [UserIDUser1] in table 'Apartments'
-ALTER TABLE [dbo].[Apartments]
-ADD CONSTRAINT [FK_UserApartment]
-    FOREIGN KEY ([UserIDUser1])
+ADD CONSTRAINT [FK_ApartmentUser]
+    FOREIGN KEY ([UserIDUser])
     REFERENCES [dbo].[Users]
         ([IDUser])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
 GO
 
--- Creating non-clustered index for FOREIGN KEY 'FK_UserApartment'
-CREATE INDEX [IX_FK_UserApartment]
+-- Creating non-clustered index for FOREIGN KEY 'FK_ApartmentUser'
+CREATE INDEX [IX_FK_ApartmentUser]
 ON [dbo].[Apartments]
-    ([UserIDUser1]);
+    ([UserIDUser]);
+GO
+
+-- Creating foreign key on [CityIDCity] in table 'Apartments'
+ALTER TABLE [dbo].[Apartments]
+ADD CONSTRAINT [FK_ApartmentCity]
+    FOREIGN KEY ([CityIDCity])
+    REFERENCES [dbo].[Cities]
+        ([IDCity])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_ApartmentCity'
+CREATE INDEX [IX_FK_ApartmentCity]
+ON [dbo].[Apartments]
+    ([CityIDCity]);
+GO
+
+-- Creating foreign key on [CityIDCity] in table 'Apartments'
+ALTER TABLE [dbo].[Apartments]
+ADD CONSTRAINT [FK_ApartmentCity1]
+    FOREIGN KEY ([CityIDCity])
+    REFERENCES [dbo].[Cities]
+        ([IDCity])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_ApartmentCity1'
+CREATE INDEX [IX_FK_ApartmentCity1]
+ON [dbo].[Apartments]
+    ([CityIDCity]);
+GO
+
+-- Creating foreign key on [UserIDUser] in table 'Apartments'
+ALTER TABLE [dbo].[Apartments]
+ADD CONSTRAINT [FK_ApartmentUser1]
+    FOREIGN KEY ([UserIDUser])
+    REFERENCES [dbo].[Users]
+        ([IDUser])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_ApartmentUser1'
+CREATE INDEX [IX_FK_ApartmentUser1]
+ON [dbo].[Apartments]
+    ([UserIDUser]);
 GO
 
 -- --------------------------------------------------

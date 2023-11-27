@@ -11,7 +11,8 @@ namespace Apartments
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class City
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -21,10 +22,11 @@ namespace Apartments
         }
     
         public int IDCity { get; set; }
+
+        [Required]
+        [MaxLength(50, ErrorMessage = "{0} can have a max of {1} characters")]
         public string Name { get; set; }
         public int CountryIDCountry { get; set; }
-        public int CountryIDCountry1 { get; set; }
-        public int CountryIDCountry2 { get; set; }
     
         public virtual Country Country { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

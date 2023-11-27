@@ -11,7 +11,8 @@ namespace Apartments
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class User
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -21,8 +22,12 @@ namespace Apartments
         }
     
         public int IDUser { get; set; }
+
+     
         public string FirstName { get; set; }
+    
         public string LastName { get; set; }
+    
         public string Email { get; set; }
         public string Phone { get; set; }
     

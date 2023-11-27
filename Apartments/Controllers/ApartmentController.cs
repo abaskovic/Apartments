@@ -20,6 +20,7 @@ namespace Apartments.Controllers
         public ActionResult Index()
         {
             return View(db.Apartments);
+           
         }
 
         // GET: Apartment/Details/5

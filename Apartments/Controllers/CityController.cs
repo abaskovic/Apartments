@@ -1,109 +1,123 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
-using System.Web;
+using System.Data.Entity;
 using System.Web.Mvc;
 
 namespace Apartments.Controllers
 {
-    public class UserController : Controller
+    public class CityController : Controller
     {
         private readonly ModelContainer db = new ModelContainer();
 
-        ~UserController()
+
+        ~CityController()
         {
             db.Dispose();
         }
-        // GET: User
+
+
+        private SelectList GetCountries()
+        {
+            var countreis = db.Countries.ToList();
+            return new SelectList(countreis, "IDCountry", "Name");
+        }
+        // GET: City
         public ActionResult Index()
         {
-            return View(db.Users);
+            var cities = db.Cities.Include(c => c.Country).ToList();
+            return View(cities);
         }
 
+      
 
-        // GET: User/Create
+        // GET: City/Create
         public ActionResult Create()
         {
+            ViewBag.CountryList = GetCountries();
             return View();
         }
 
-        // GET: User/Details/5
+        // GET: City/Details/5
         public ActionResult Details(int? id)
         {
             return CommandAction(id);
         }
 
-        // GET: User/Edit/5
+        // GET: City/Edit/5
         public ActionResult Edit(int? id)
         {
             return CommandAction(id);
         }
 
-        // GET: User/Delete/5
+        // GET: City/Delete/5
         public ActionResult Delete(int? id)
         {
             return CommandAction(id);
         }
 
-
-        // POST: User/Create
+        // POST: City/Create
         [HttpPost]
-        public ActionResult Create(User  user)
+        public ActionResult Create(City City)
         {
             if (ModelState.IsValid)
             {
-                db.Users.Add(user);
+                db.Cities.Add(City);
                 db.SaveChanges();
             }
             return RedirectToAction(nameof(Index));
         }
 
-        
-        // POST: User/Edit/5
+
+
+        // POST: City/Edit/5
         [HttpPost]
         public ActionResult Edit(int id)
         {
-            var user = db.Users.Find(id);
-            if (TryUpdateModel(user, "", new string[]
+            var city = db.Cities.Find(id);
+            if (TryUpdateModel(city, "", new string[]
             {
+                nameof(City.Name),
+                nameof(City.CountryIDCountry),
             }))
             {
-                db.Entry(user).State = EntityState.Modified;
+                db.Entry(city).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
-            return View(user);
+            return View(city);
         }
-            
 
-        // POST: User/Delete/5
+
+
+        // POST: City/Delete/5
         [HttpPost]
-        public ActionResult Delete(int id)
+        public ActionResult Delete(int id, FormCollection collection)
         {
-            db.Apartments.RemoveRange(db.Apartments.Where(f => f.UserIDUser == id));
-            db.Users.Remove(db.Users.Find(id));
+            db.Cities.Remove(db.Cities.Find(id));
             db.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
 
+
         private ActionResult CommandAction(int? id)
         {
+            ViewBag.CountryList = GetCountries();
 
             if (id == null)
             {
                 return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
             }
 
-            var user = db.Users
-                .SingleOrDefault(a => a.IDUser == id);
+            var city = db.Cities
+                .SingleOrDefault(a => a.IDCity == id);
 
-            if (user == null)
+            if (city == null)
             {
                 return HttpNotFound();
             }
 
-            return View(user);
+            return View(city);
         }
     }
 }

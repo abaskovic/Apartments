@@ -1,5 +1,11 @@
 ﻿@model IEnumerable<Apartments.Apartment>
 
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
@@ -11,18 +17,11 @@
         <th>
             @Html.DisplayNameFor(model => model.Address)
         </th>
-  
-        <th>
-            @Html.DisplayNameFor(model => model.CityIDCity)
-        </th>
         <th>
             @Html.DisplayNameFor(model => model.UserIDUser)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.CityIDCity1)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.UserIDUser1)
+            @Html.DisplayNameFor(model => model.CityIDCity)
         </th>
         <th></th>
     </tr>
@@ -35,23 +34,16 @@
         <td>
             @Html.DisplayFor(modelItem => item.Address)
         </td>
-       
-        <td>
-            @Html.DisplayFor(modelItem => item.CityIDCity)
-        </td>
         <td>
             @Html.DisplayFor(modelItem => item.UserIDUser)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.CityIDCity1)
+            @Html.DisplayFor(modelItem => item.CityIDCity)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.UserIDUser1)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new {  id=item.IDApartment }) |
-            @Html.ActionLink("Details", "Details", new { id = item.IDApartment }) |
-            @Html.ActionLink("Delete", "Delete", new { id = item.IDApartment })
+            @Html.ActionLink("Edit", "Edit", new { id=item.IDApartment  }) |
+            @Html.ActionLink("Details", "Details", new {id=item.IDApartment  }) |
+            @Html.ActionLink("Delete", "Delete", new {id=item.IDApartment  })
         </td>
     </tr>
 }

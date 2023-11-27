@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'D:\Podaci\office10\Documents\Apartments\Apartments\Model.edmx'. 
+﻿// T4 code generation is enabled for model 'C:\Users\office10\source\repos\abaskovic\Apartments\Apartments\Model.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.
