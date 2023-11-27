@@ -42,6 +42,38 @@
             @Html.DisplayFor(model => model.User.FullName)
         </dd>
 
+        <dt>
+            @Html.DisplayNameFor(model => model.User.Email)
+        </dt>
+
+        <dd>
+            @{ var email = "mailto:" + Model.User.Email;}
+            <a href="@email">@Model.User.Email</a>
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.User.Phone)
+        </dt>
+
+
+        <dd>
+            @{ var tel = "tel:" + Model.User.Phone;}
+            <a href="@tel">@Model.User.Phone</a>
+        </dd>
+
+
+
+        @foreach (var uploadedFile in Model.UploadedFiles)
+        {
+            <dt>
+                @uploadedFile.Name
+            </dt>
+            <dd style="margin-top:10px">
+                <img src="~/File?id=@uploadedFile.IDUploadedFile" alt="Picture" width="300" height="200" />
+            </dd>
+        }
+
+
     </dl>
 </div>
 <p>

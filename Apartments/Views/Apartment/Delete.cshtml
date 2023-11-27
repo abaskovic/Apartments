@@ -43,6 +43,17 @@
             @Html.DisplayFor(model => model.User.FullName)
         </dd>
 
+        @foreach (var uploadedFile in Model.UploadedFiles)
+        {
+            <dt>
+                @uploadedFile.Name
+            </dt>
+            <dd style="margin-top:10px">
+                <img src="~/File?id=@uploadedFile.IDUploadedFile" alt="Picture" width="300" height="200" />
+            </dd>
+        }
+
+
     </dl>
 
     @using (Html.BeginForm()) {

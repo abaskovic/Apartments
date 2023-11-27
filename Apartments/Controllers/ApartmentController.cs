@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Web;
+using System.Diagnostics;
 
 namespace Apartments.Controllers
 {
@@ -26,8 +27,6 @@ namespace Apartments.Controllers
 
         ~ApartmentController()
         {
-
-
             db.Dispose();
         }
         public ActionResult Index()
@@ -53,14 +52,73 @@ namespace Apartments.Controllers
             return CommandAction(id);
         }
 
-
-
         // GET: Apartment/Delete/5
         public ActionResult Delete(int? id)
         {
             return CommandAction(id);
 
         }
+
+
+
+
+
+        [HttpPost]
+        public ActionResult Create(Apartment apartment, IEnumerable<HttpPostedFileBase> files)
+        {
+
+            Debug.WriteLine(files);
+            if (ModelState.IsValid)
+            {
+                apartment.UploadedFiles = new List<UploadedFile>();
+                AddFiles(apartment, files);
+                db.Apartments.Add(apartment);
+                db.SaveChanges();
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
+
+        // GET: Apartment/Edit/5
+        public ActionResult Edit(int? id)
+        {
+            return CommandAction(id);
+
+        }
+
+        // POST: Apartment/Edit/5
+        [HttpPost]
+        public ActionResult Edit(int id, IEnumerable<HttpPostedFileBase> files)
+        {
+            var apartment = db.Apartments.Find(id);
+            if (TryUpdateModel(apartment, "", new string[]
+            {
+                nameof(Apartment.Address),
+                nameof(Apartment.UserIDUser),
+                nameof(Apartment.CityIDCity),
+
+            }))
+            {
+                AddFiles(apartment, files);
+
+                db.Entry(apartment).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(apartment);
+        }
+
+
+        // POST: Apartment/Delete/5
+        [HttpPost]
+        public ActionResult Delete(int id, FormCollection collection)
+        {
+            db.UploadedFiles.RemoveRange(db.UploadedFiles.Where(f => f.ApartmentIDApartment == id));
+            db.Apartments.Remove(db.Apartments.Find(id));
+            db.SaveChanges();
+            return RedirectToAction(nameof(Index));
+        }
+
         private ActionResult CommandAction(int? id)
         {
 
@@ -85,57 +143,26 @@ namespace Apartments.Controllers
             return View(apartman);
         }
 
-   
 
 
-        [HttpPost]
-        public ActionResult Create(Apartment apartment)
+        private static void AddFiles(Apartment apartment, IEnumerable<HttpPostedFileBase> files)
         {
-            if (ModelState.IsValid)
+            foreach (var file in files)
             {
-                apartment.UploadedFiles = new List<UploadedFile>();
-                db.Apartments.Add(apartment);
-                db.SaveChanges();
+                if (file != null && file.ContentLength > 0)
+                {   
+                    var picture = new UploadedFile
+                    {
+                        Name = file.FileName,
+                        ContentType = file.ContentType
+                    };
+                    using (var reader = new System.IO.BinaryReader(file.InputStream))
+                    {
+                        picture.Content = reader.ReadBytes(file.ContentLength);
+                    }
+                    apartment.UploadedFiles.Add(picture);
+                }
             }
-            return RedirectToAction(nameof(Index));
-        }
-
-        // GET: Apartment/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            return CommandAction(id);
-
-        }
-
-        // POST: Apartment/Edit/5
-        [HttpPost]
-        public ActionResult Edit(int id)
-        {
-            var apartment = db.Apartments.Find(id);
-            if (TryUpdateModel(apartment, "", new string[]
-            {
-                nameof(Apartment.Address),
-                nameof(Apartment.UserIDUser),
-                nameof(Apartment.CityIDCity),
-
-            }))
-            {
-                db.Entry(apartment).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(apartment);
-        }
-
-
-        // POST: Apartment/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            db.UploadedFiles.RemoveRange(db.UploadedFiles.Where(f => f.ApartmentIDApartment == id));
-            db.Apartments.Remove(db.Apartments.Find(id));
-            db.SaveChanges();
-            return RedirectToAction(nameof(Index));
         }
     }
 }

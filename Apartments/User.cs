@@ -24,15 +24,20 @@ namespace Apartments
         public int IDUser { get; set; }
 
         [Required]
+        [MaxLength(50, ErrorMessage = "{0} can have a max of {1} characters")]
         public string FirstName { get; set; }
 
         [Required]
+        [MaxLength(50, ErrorMessage = "{0} can have a max of {1} characters")]
         public string LastName { get; set; }
 
         [Required]
+        [MaxLength(50, ErrorMessage = "{0} can have a max of {1} characters")]
+        [EmailAddress(ErrorMessage = "Invalid Email Address")]
         public string Email { get; set; }
 
         [Required]
+        [MaxLength(20, ErrorMessage = "{0} can have a max of {1} characters")]
         public string Phone { get; set; }
 
         public string FullName
