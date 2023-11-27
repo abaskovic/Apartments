@@ -26,6 +26,8 @@ namespace Apartments
         [Required]
         [MaxLength(50, ErrorMessage = "{0} can have a max of {1} characters")]
         public string Name { get; set; }
+
+        [Required(ErrorMessage = "Country is required")]
         public int CountryIDCountry { get; set; }
     
         public virtual Country Country { get; set; }

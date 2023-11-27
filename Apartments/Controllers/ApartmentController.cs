@@ -13,14 +13,38 @@ namespace Apartments.Controllers
 
         private readonly ModelContainer db = new ModelContainer();
 
+        private SelectList GetCities()
+        {
+            var cities = db.Countries.ToList();
+            return new SelectList(cities, "IDCity", "Name");
+        }
+        private SelectList GetUsers()
+        {
+            var cities = db.Users.ToList();
+            return new SelectList(cities, "IDUser", "FirstName", "LastName");
+        }
+
         ~ApartmentController()
         {
+
+
             db.Dispose();
         }
         public ActionResult Index()
         {
-            return View(db.Apartments);
-           
+            var app = db.Apartments.Include(c => c.City).Include(c => c.User).ToList();
+            return View(app);
+
+        }
+
+
+        // GET: Apartment/Create
+
+        public ActionResult Create()
+        {
+            ViewBag.CitiesList = GetCities();
+            ViewBag.UsersList = GetUsers();
+            return View();
         }
 
         // GET: Apartment/Details/5
@@ -31,17 +55,17 @@ namespace Apartments.Controllers
 
         private ActionResult CommandAction(int? id)
         {
-            if (id==null)
+            if (id == null)
             {
 
                 return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
             }
 
             var apartman = db.Apartments
-                .Include(a=>a.UploadedFiles)
-                .SingleOrDefault(a=> a.IDApartment== id);
+                .Include(a => a.UploadedFiles)
+                .SingleOrDefault(a => a.IDApartment == id);
 
-            if (apartman==null)
+            if (apartman == null)
             {
                 return HttpNotFound();
             }
@@ -49,14 +73,7 @@ namespace Apartments.Controllers
             return View(apartman);
         }
 
-        // GET: Apartment/Create
-       
-
-
-        public ActionResult Create()
-        {
-            return View();
-        }
+   
 
 
         [HttpPost]
@@ -82,8 +99,8 @@ namespace Apartments.Controllers
         [HttpPost]
         public ActionResult Edit(int id)
         {
-            var apartment = db.Apartments.Find(id); 
-            if (TryUpdateModel(apartment,"",new string[]
+            var apartment = db.Apartments.Find(id);
+            if (TryUpdateModel(apartment, "", new string[]
             {
                 nameof(Apartment.Address),
             }))
@@ -106,7 +123,7 @@ namespace Apartments.Controllers
         [HttpPost]
         public ActionResult Delete(int id, FormCollection collection)
         {
-            db.UploadedFiles.RemoveRange(db.UploadedFiles.Where(f=>f.ApartmentIDApartment==id));
+            db.UploadedFiles.RemoveRange(db.UploadedFiles.Where(f => f.ApartmentIDApartment == id));
             db.Apartments.Remove(db.Apartments.Find(id));
             db.SaveChanges();
             return RedirectToAction(nameof(Index));

@@ -20,17 +20,21 @@ namespace Apartments
         {
             this.Apartments = new HashSet<Apartment>();
         }
-    
+
         public int IDUser { get; set; }
 
-     
+        [Required]
         public string FirstName { get; set; }
-    
+
+        [Required]
         public string LastName { get; set; }
-    
+
+        [Required]
         public string Email { get; set; }
+
+        [Required]
         public string Phone { get; set; }
-    
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Apartment> Apartments { get; set; }
     }

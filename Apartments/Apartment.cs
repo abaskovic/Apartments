@@ -11,7 +11,8 @@ namespace Apartments
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class Apartment
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -19,12 +20,19 @@ namespace Apartments
         {
             this.UploadedFiles = new HashSet<UploadedFile>();
         }
-    
+
         public int IDApartment { get; set; }
+
+        [Required]
+        [MaxLength(50, ErrorMessage = "{0} can have a max of {1} characters")]
         public string Address { get; set; }
+
+        [Required(ErrorMessage = "City is required")]
         public int CityIDCity { get; set; }
+        [Required(ErrorMessage = "User is required")]
+
         public int UserIDUser { get; set; }
-    
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UploadedFile> UploadedFiles { get; set; }
         public virtual City City { get; set; }

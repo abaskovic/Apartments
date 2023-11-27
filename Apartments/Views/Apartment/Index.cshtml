@@ -18,10 +18,10 @@
             @Html.DisplayNameFor(model => model.Address)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.UserIDUser)
+            User
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.CityIDCity)
+            City
         </th>
         <th></th>
     </tr>
@@ -35,10 +35,10 @@
             @Html.DisplayFor(modelItem => item.Address)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.UserIDUser)
+            @Html.DisplayFor(modelItem => item.User.FirstName + " " + item.User.LastName)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.CityIDCity)
+            @Html.DisplayFor(modelItem => item.City.Name)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.IDApartment  }) |
