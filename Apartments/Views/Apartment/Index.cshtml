@@ -18,10 +18,10 @@
             @Html.DisplayNameFor(model => model.Address)
         </th>
         <th>
-            User
+            @Html.DisplayNameFor(model => model.User)
         </th>
         <th>
-            City
+            @Html.DisplayNameFor(model => model.City)
         </th>
         <th></th>
     </tr>
@@ -35,7 +35,7 @@
             @Html.DisplayFor(modelItem => item.Address)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.User.FirstName + " " + item.User.LastName)
+            @Html.DisplayFor(modelItem => item.User.FullName)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.City.Name)

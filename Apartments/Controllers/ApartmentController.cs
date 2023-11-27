@@ -15,13 +15,13 @@ namespace Apartments.Controllers
 
         private SelectList GetCities()
         {
-            var cities = db.Countries.ToList();
+            var cities = db.Cities.ToList();
             return new SelectList(cities, "IDCity", "Name");
         }
         private SelectList GetUsers()
         {
-            var cities = db.Users.ToList();
-            return new SelectList(cities, "IDUser", "FirstName", "LastName");
+            var users = db.Users.ToList();
+            return new SelectList(users, "IDUser", "FullName");
         }
 
         ~ApartmentController()
@@ -53,8 +53,20 @@ namespace Apartments.Controllers
             return CommandAction(id);
         }
 
+
+
+        // GET: Apartment/Delete/5
+        public ActionResult Delete(int? id)
+        {
+            return CommandAction(id);
+
+        }
         private ActionResult CommandAction(int? id)
         {
+
+            ViewBag.CitiesList = GetCities();
+            ViewBag.UsersList = GetUsers();
+
             if (id == null)
             {
 
@@ -103,6 +115,9 @@ namespace Apartments.Controllers
             if (TryUpdateModel(apartment, "", new string[]
             {
                 nameof(Apartment.Address),
+                nameof(Apartment.UserIDUser),
+                nameof(Apartment.CityIDCity),
+
             }))
             {
                 db.Entry(apartment).State = EntityState.Modified;
@@ -112,12 +127,6 @@ namespace Apartments.Controllers
             return View(apartment);
         }
 
-        // GET: Apartment/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            return CommandAction(id);
-
-        }
 
         // POST: Apartment/Delete/5
         [HttpPost]

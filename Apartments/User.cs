@@ -35,7 +35,14 @@ namespace Apartments
         [Required]
         public string Phone { get; set; }
 
+        public string FullName
+        {
+            get { return $"{FirstName} {LastName}"; }
+        }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Apartment> Apartments { get; set; }
+
+
     }
 }
